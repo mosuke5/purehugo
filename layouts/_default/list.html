@@ -7,7 +7,7 @@
         <div>
             <!-- A wrapper for all the blog posts -->
             <div class="posts">
-                {{ range .Paginator.Pages }}
+                {{ range (.Paginator 10).Pages }}
                 <h1 class="content-subhead">{{ .Date.Format "02 Jan 2006, 15:04" }}</h1>
                 <section class="post">
                     <header class="post-header">
@@ -19,16 +19,18 @@
                                 By <strong class="post-author">{{ . }}</strong>
                             {{ end }}
                             {{ if isset .Params "categories" }}
-                                under 
-                                {{ range .Params.categories }}
-                                    <a class="post-category post-category-{{ . }}" href='{{ ( printf "categories/%s" . ) | absURL }}'>{{ . }}</a>
-                                {{ end }}
+                                <br />
+                                {{ $baseUrl := .Site.BaseURL }}
+                                {{ range .Params.categories }}<a class="post-category post-category-{{ . }}" href="{{ $baseUrl }}/categories/{{ . | urlize }}">{{ . }}</a>{{ end }}
                             {{ end }}
                         </p>
                     </header>
 
                     <div class="post-description">
-                        {{ .Content }}
+                        {{ .Summary }}
+                    </div>
+                    <div class="read-more-link">
+                        <a href="{{ .Permalink }}">全文を読む</a>
                     </div>
                 </section>
                 {{ end }}
